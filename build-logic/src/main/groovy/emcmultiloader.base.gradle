@@ -1,0 +1,56 @@
+plugins {
+    id 'java-library'
+}
+
+def requiredProperty = { String propertyName ->
+    project.property(propertyName).toString()
+}
+
+def modId = requiredProperty 'mod_id'
+def modName = requiredProperty 'mod_name'
+def minecraftVersion = requiredProperty 'minecraft_version'
+def javaVersion = requiredProperty('java_version').toInteger()
+
+group = requiredProperty 'maven_group'
+version = requiredProperty 'mod_version'
+
+def metadata = [
+        version          : project.version.toString(),
+        mod_id           : modId,
+        mod_name         : modName,
+        mod_license      : requiredProperty('mod_license'),
+        mod_authors      : requiredProperty('mod_authors'),
+        mod_description  : requiredProperty('mod_description'),
+        minecraft_version: minecraftVersion,
+        java_version     : javaVersion.toString(),
+        homepage_url     : requiredProperty('curseforge_url'),
+        sources_url      : requiredProperty('sources_url'),
+        issue_tracker_url: requiredProperty('issue_tracker_url')
+].asImmutable()
+
+ext.sharedModMetadata = metadata
+
+base {
+    archivesName = "${modId}-${project.name}-${minecraftVersion}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(javaVersion)
+    }
+
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set javaVersion
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Jar).configureEach {
+    from(rootProject.file('LICENSE')) {
+        rename {
+            "${it}_${modId}"
+        }
+    }
+}

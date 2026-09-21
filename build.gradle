@@ -1,0 +1,13 @@
+plugins {
+    id 'base'
+
+    id 'net.fabricmc.fabric-loom' version "$loom_version" apply false
+    id 'net.neoforged.moddev' version "$moddevgradle_version" apply false
+    id 'net.minecraftforge.gradle' version "$forge_gradle_version_range" apply false
+}
+
+subprojects {
+    tasks.withType(Jar).configureEach {
+        destinationDirectory = rootProject.layout.buildDirectory.dir('libs')
+    }
+}

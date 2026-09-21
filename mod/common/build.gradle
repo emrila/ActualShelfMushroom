@@ -1,0 +1,13 @@
+plugins {
+    id 'emcmultiloader.common'
+    id 'net.neoforged.moddev'
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+}
+
+dependencies {
+    compileOnly "net.fabricmc:sponge-mixin:${project.mixin_version}"
+    compileOnly annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}")
+}

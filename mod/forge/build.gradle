@@ -1,0 +1,86 @@
+plugins {
+    id 'emcmultiloader.loader'
+    id 'idea'
+    id 'net.minecraftforge.gradle'
+}
+
+minecraft {
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
+
+            args "--mixin.config=${mod_id}.mixins.json"
+
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        register('client')
+
+        register('server') {
+            args '--nogui'
+        }
+
+        register('gameTestServer')
+
+        register('data') {
+            workingDir = layout.projectDirectory.dir('run-data')
+
+            args '--mod',
+                    mod_id,
+                    '--all',
+                    '--output',
+                    layout.projectDirectory.dir('src/generated/resources'),
+                    '--existing',
+                    layout.projectDirectory.dir('src/main/resources')
+        }
+    }
+}
+
+
+def mainOutputDirectory = layout.buildDirectory.dir('resources/main')
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+sourceSets.main.output.resourcesDir = mainOutputDirectory.get().asFile
+
+tasks.named('compileJava', JavaCompile).configure {
+    destinationDirectory = mainOutputDirectory
+}
+
+repositories {
+    minecraft.mavenizer it // In Kotlin, it = this
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.5'
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes 'MixinConfigs': "${mod_id}.mixins.json"
+    }
+}
+
+def replaceProperties = sharedModMetadata + [
+        minecraft_version_range    : minecraft_version_range,
+        forge_version_range        : forge_version_range,
+        forge_loader_version_range : forge_loader_version_range
+]
+
+tasks.named('processResources', ProcessResources).configure {
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties
+    }
+}

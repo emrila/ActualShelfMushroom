@@ -1,0 +1,61 @@
+pluginManagement {
+    includeBuild 'build-logic'
+
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+
+        maven {
+            name = 'Fabric'
+            url = uri('https://maven.fabricmc.net/')
+        }
+
+        maven {
+            name = 'NeoForge'
+            url = uri('https://maven.neoforged.net/releases')
+        }
+
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+dependencyResolutionManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+
+        maven {
+            name = 'Fabric'
+            url = uri('https://maven.fabricmc.net/')
+        }
+
+        maven {
+            name = 'NeoForge'
+            url = uri('https://maven.neoforged.net/releases')
+        }
+
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+    }
+}
+
+
+rootProject.name = 'EmcMultiLoader'
+include 'common'
+include 'fabric'
+include 'neoforge'
+include 'forge'
+
+project(':common').projectDir = file('mod/common')
+project(':fabric').projectDir = file('mod/fabric')
+project(':forge').projectDir = file('mod/forge')
+project(':neoforge').projectDir = file('mod/neoforge')

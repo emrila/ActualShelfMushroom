@@ -1,0 +1,85 @@
+plugins {
+    id 'emcmultiloader.loader'
+    id 'idea'
+    id 'net.neoforged.moddev'
+}
+
+neoForge {
+    version = neoforge_version
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+
+        data {
+            clientData()
+            programArguments.addAll(
+                    '--mod',
+                    mod_id,
+                    '--all',
+                    '--output',
+                    file('src/generated/resources').absolutePath,
+                    '--existing',
+                    file('src/main/resources').absolutePath
+            )
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+def replaceProperties = sharedModMetadata + [
+        minecraft_version_range      : minecraft_version_range,
+        neoforge_version_range       : neoforge_version_range,
+        neoforge_loader_version_range: neoforge_loader_version_range
+]
+
+def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    inputs.properties replaceProperties
+
+    filesMatching('pack.mcmeta') {
+        expand replaceProperties
+    }
+
+    from('src/main/templates') {
+        expand replaceProperties
+    }
+    into layout.buildDirectory.dir('generated/sources/modMetadata')
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+
+neoForge.ideSyncTask generateModMetadata
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

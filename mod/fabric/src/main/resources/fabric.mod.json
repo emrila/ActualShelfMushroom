@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_authors}"
+  ],
+  "contact": {
+    "homepage": "${homepage_url}",
+    "sources": "${sources_url}",
+    "issueTracker": "${issue_tracker_url}"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/emcmultiloader/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.emrila.emcmultiloader.EmcMultiLoader"
+    ],
+    "fabric-datagen": [
+      "org.emrila.emcmultiloader.EmcMultiLoaderDataGen"
+    ]
+  },
+  "mixins": [
+    "emcmultiloader.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "java": ">=${java_version}",
+    "minecraft": "${fabric_minecraft_version}"
+  }
+}

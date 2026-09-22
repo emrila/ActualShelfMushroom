@@ -1,9 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.emrila.emcmultiloader.mixin",
+  "package": "org.emrila.actualshelfmushroom.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "BlockStateBaseAccessor",
+    "ShelfMushroomBlockMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

@@ -49,7 +49,7 @@ dependencyResolutionManagement {
 }
 
 
-rootProject.name = 'EmcMultiLoader'
+rootProject.name = 'ActualShelfMushroom'
 include 'common'
 include 'fabric'
 include 'neoforge'

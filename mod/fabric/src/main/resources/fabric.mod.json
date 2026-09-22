@@ -14,18 +14,18 @@
     "issueTracker": "${issue_tracker_url}"
   },
   "license": "${mod_license}",
-  "icon": "assets/emcmultiloader/icon.png",
+  "icon": "assets/actualshelfmushroom/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.emrila.emcmultiloader.EmcMultiLoader"
+      "org.emrila.actualshelfmushroom.ActualShelfMushroom"
     ],
     "fabric-datagen": [
-      "org.emrila.emcmultiloader.EmcMultiLoaderDataGen"
+      "org.emrila.actualshelfmushroom.ActualShelfMushroomDataGen"
     ]
   },
   "mixins": [
-    "emcmultiloader.mixins.json"
+    "actualshelfmushroom.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

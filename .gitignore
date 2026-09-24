@@ -56,3 +56,4 @@ bin/
 **/run/
 **/.cache/
 **/run-data/
+*.xml
